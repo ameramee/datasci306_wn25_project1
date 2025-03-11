@@ -192,6 +192,44 @@ gas_circ
 
 * There are several variables that pull out data by different industry (the `_idx` columns). Create a table for these columns using `select` and the `ends_with` function. Provide two different plots that show of the relations between these variables (you do not need to have all variables in each plot).
 
+```{r}
+```{r}
+  # Create a table with columns that end with '_idx'
+idx_table <- daily %>%
+  select(ends_with("_idx"))
+
+# Print the first few rows of the table to verify the selection
+print(head(idx_table))
+
+# Create a scatter plot between the first two _idx columns (if available)
+if(ncol(idx_table) >= 2) {
+  col1 <- names(idx_table)[1]
+  col2 <- names(idx_table)[2]
+  
+  plot1 <- ggplot(idx_table, aes_string(x = col1, y = col2)) +
+    geom_point() +
+    labs(title = paste("Scatter Plot of", col1, "vs", col2),
+         x = col1,
+         y = col2) +
+    theme_minimal()
+  print(plot1)
+}
+
+# Create a second scatter plot between the first and third _idx columns (if available)
+if(ncol(idx_table) >= 3) {
+  col3 <- names(idx_table)[3]
+  
+  plot2 <- ggplot(idx_table, aes_string(x = col1, y = col3)) +
+    geom_point() +
+    labs(title = paste("Scatter Plot of", col1, "vs", col3),
+         x = col1,
+         y = col3) +
+    theme_minimal()
+  print(plot2)
+}
+
+```
+```
 
 ## Objectives
 
