@@ -29,11 +29,55 @@ Your job in this project falls into two categories:
     * Call the first table `daily`: "./data/natural_gas_germany_daily.csv"
     * Call the second table `gas`: "./data/dutch_ttf_natural_gas.csv". Be sure to properly import the `Date` column.
     * Demonstrate that these have been loaded by showing the number of rows and columns in each table.
-  
+```{r}
+daily <- read_csv("./data/natural_gas_germany_daily.csv")
+gas <- read_csv(
+  "./data/dutch_ttf_natural_gas.csv",
+  col_types = cols(
+    Date = col_date(format = "%m/%d/%Y"),  
+    Price = col_double(),
+    Open = col_double(),
+    High = col_double(),
+    Low = col_double(),
+    `Vol.` = col_character(),
+    `Change %` = col_character())
+  )
+```
 
 ### Task 2
 
 * The data in `daily` are collected over days, with information on different types of natural gas consumption (`consumption_small`, `consumption_industry`, `consumption_power`). Provide summaries of typical values for each of these three types of consumption.
+
+```{r}
+summary_small <- daily |> summarize(
+  mean = mean(consumption_small, na.rm = TRUE),
+  median = median(consumption_small, na.rm = TRUE),
+  sd = sd(consumption_small, na.rm = TRUE),
+  min = min(consumption_small, na.rm = TRUE),
+  max = max(consumption_small, na.rm = TRUE),
+)
+
+summary_industry <- daily |> summarize(
+  mean = mean(consumption_industry, na.rm = TRUE),
+  median = median(consumption_industry, na.rm = TRUE),
+  sd = sd(consumption_industry, na.rm = TRUE),
+  min = min(consumption_industry, na.rm = TRUE),
+  max = max(consumption_industry, na.rm = TRUE),
+)
+
+summary_power <- daily |> summarize(
+  mean = mean(consumption_power, na.rm = TRUE),
+  median = median(consumption_power, na.rm = TRUE),
+  sd = sd(consumption_power, na.rm = TRUE),
+  min = min(consumption_power, na.rm = TRUE),
+  max = max(consumption_power, na.rm = TRUE)
+)
+
+print(summary_small)
+print(summary_industry)
+print(summary_power)
+
+```
 
 
 ### Task 3
