@@ -138,6 +138,51 @@ The missingness pattern plot shows that most rows have no missing values, but th
 
 * Limit the `gas` table to days where the price exceeded the yearly median. Use the concept of [circular means](https://en.wikipedia.org/wiki/Circular_mean) to compute the average day of the year when price exceeds the yearly median price. The `yday` function will likely be useful here. 
 
+```{r circular-mean, echo=TRUE}
+library(tidyverse)
+library(lubridate)
+
+gas_circ <- gas %>%
+  # Extract the calendar year from Date
+  mutate(Year = year(Date)) %>%
+  group_by(Year) %>%
+  # Compute the median Price for each year
+  mutate(yearly_median = median(Price, na.rm = TRUE)) %>%
+  # Keep rows where Price exceeds the yearly median
+  filter(Price > yearly_median) %>%
+  # Convert to day of year; handle leap years
+  mutate(
+    day_of_year = yday(Date),
+    # n_days is the number of days in the given year (365 or 366)
+    n_days = if_else(leap_year(Date), 366, 365)
+  ) %>%
+  # Summarize by computing the circular mean of day_of_year
+  summarise(
+    circ_mean_day = {
+      # Convert day_of_year to an angle in radians
+      angles <- 2 * pi * (day_of_year / n_days)
+      
+      # Compute mean of cos() and sin() to handle wrap-around
+      avg_cos <- mean(cos(angles))
+      avg_sin <- mean(sin(angles))
+      
+      # atan2() gives the average angle
+      mean_angle <- atan2(avg_sin, avg_cos)
+      
+      # Ensure angle is in [0, 2*pi)
+      if (mean_angle < 0) {
+        mean_angle <- mean_angle + 2 * pi
+      }
+      
+      # Convert the angle back to a day of year
+      mean_angle / (2 * pi) * n_days[1]
+    }
+  ) %>%
+  ungroup()
+
+gas_circ
+
+```
 
 ### Task 7
 
