@@ -99,6 +99,39 @@ Produce plots that show the same information that is presented in this plot. You
 
 * Write a predicate function that returns true if any value in vector is missing. Use this function to find columns with missing values in the `daily` column. Create a plot or table that shows how often patterns of missingness occur: are all of the missing values in the same rows or are the various columns missing data in different ways?
 
+```{r}
+  # Define a predicate function that returns TRUE if any value in a vector is missing
+has_missing <- function(x) {
+  any(is.na(x))
+}
+
+# Use the function to check for missing values in each column of the 'daily' data frame
+missing_columns <- sapply(daily, has_missing)
+# Print out only those columns that have missing values
+print("Columns with missing values:")
+print(missing_columns[missing_columns == TRUE])
+
+# Create a table showing the pattern of missingness by row
+# For each row, create a string pattern where "1" indicates a missing value and "0" indicates a non-missing value
+daily_missing_pattern <- daily %>%
+  mutate(missing_pattern = apply(is.na(.), 1, function(row) paste(ifelse(row, "1", "0"), collapse = ""))) %>%
+  count(missing_pattern) %>%
+  arrange(desc(n))
+  
+print(daily_missing_pattern)
+
+# Plot the frequency of each missingness pattern
+ggplot(daily_missing_pattern, aes(x = missing_pattern, y = n)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Missingness Patterns in Daily Data",
+       x = "Missingness Pattern (1 = Missing, 0 = Present)",
+       y = "Count of Rows") +
+  theme_minimal()
+
+```
+
+The missingness pattern plot shows that most rows have no missing values, but there are multiple distinct patterns where different columns are missing data. This indicates that missing values are not concentrated in a single set of rows, but instead, different columns have missing values in varying ways. Some rows have only one or two missing values, while others have a unique combination of missing columns. This suggests that missingness is likely due to incomplete data collection or specific external factors affecting different variables separately rather than a single systematic issue affecting entire rows.
+
 
 
 ### Task 6
