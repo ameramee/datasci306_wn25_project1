@@ -1,6 +1,6 @@
 ---
 title: "Project 1"
-author: "GROUP MEMBERS"
+author: "Ameer Amer, Michael Kramer, Jack Reed"
 output: html_document
 ---
 
