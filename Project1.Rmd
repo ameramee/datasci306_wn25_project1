@@ -280,12 +280,63 @@ if(ncol(idx_table) >= 3) {
 
 ### Objective 1
 
-* Produce at least five more figures. For each figure, write a brief caption explaining the plot and what you have learned from the plot. Each figure should attempt to provide new insight into the data set not included elsewhere
-    * A marginal distribution
+* A marginal distribution
+    ```{r}
+    ggplot(daily, aes(x = temperature)) +
+    geom_histogram(binwidth = 3, fill = "blue", color = "black") +
+    labs(title = "Marginal Distribution of Temperature",
+       x = "Temperature (K)",
+       y = "Frequency")
+    ```
+    This histogram shows the distribution of daily temperatures in the dataset. The distribution looks to be 
+    approximately normal with a mean of about 284 Kelvin. This tells us that the temperature for most of the days in the 
+    dataset are round 284, with extreme values being less common.
+    
     * A joint distribution
+    ```{r}
+    filtered_daily <- daily |> filter(!is.na(consumption_industry))
+    ggplot(filtered_daily, aes(x = temperature, y = consumption_industry)) +
+    geom_point(alpha = 0.5, color = "blue") +
+    labs(title = "Joint Distribution of Industry Consumer Consumption and Temperature",
+         x = "Temperature (K)",
+         y = "Consumption")
+    ```
+    The graph shows a negative relationship between consumption and temperature. This means that as temperature
+    increases, industry consumption decreases.
+    
     * A plot of a summary measure such as a conditional mean
+    ```{r}
+    daily |> group_by(month) |> summarize(mean_manufacturing_idx = mean(manufacturing_idx, na.rm = TRUE)) |>
+    ggplot(aes(x = factor(month), y = mean_manufacturing_idx)) + geom_line(color = "blue", group = 1) +
+    labs(title = "Mean Manufacturing Index by Month",
+         x = "Month",
+         y = "Mean Index")
+    ```
+    This plot about mean manufacturing index vs month plots the mean manufacturing index across all the years for each 
+    month. It tells us that the mean manufacturing index is, on average, the highest in March and the lowest in August.
+    
     * A plot using `facet_wrap` or `facet_grid`
+    ```{r}
+    new_daily <- daily |> filter(!is.na(consumption_small))
+    new_daily |> ggplot(aes(x = heating_profiles, y = consumption_small)) + geom_point() +
+    facet_wrap(~ holiday, label = labeller(holiday = c("0" = "No Long Weekend", "1" = "Long Weekend"))) +
+    labs(title = "Small Station Consumption vs Heating Profiles by Long Weekend Status",
+         x = "Heating Profile",
+         y = "Consumption (Small)")
+    ```
+    This graph shows us whether or not having a long weekend affects small consumers station consumption vs heating 
+    profile. As wecan see in the faceted plot above, it doesn't really affect it.
+    
     * A plot that shows seasonal effects before the crisis (September 2021 until October 2022)
+    ```{r}
+    new_daily <- daily |> filter(!is.na(consumption_power))
+    new_daily |> filter(date >= as.Date("2021-09-01") & date <= as.Date("2022-10-31")) |> 
+    ggplot(aes(x = date, y = consumption_power)) + geom_line(color = "blue") +
+    labs(title = "Seasonal Effects on Power Station Consumption (Sep 2021 - Oct 2022)",
+       x = "Date",
+       y = "Consumption (Power)")
+    ```
+This graph shows us that January 2022 has the lowest consumption for power stations and February had the highest. Overall the graph fluctuates a lot, but tend to have lower values in the summer and higher values in the winter
     
 
 ### Objective 2
