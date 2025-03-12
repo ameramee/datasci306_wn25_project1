@@ -351,10 +351,10 @@ if(ncol(idx_table) >= 3) {
 * A marginal distribution
     ```{r}
     ggplot(daily, aes(x = temperature)) +
-    geom_histogram(binwidth = 3, fill = "blue", color = "black") +
+    geom_histogram(aes(y = after_stat(count / sum(count))), binwidth = 3, fill = "blue", color = "black") +
     labs(title = "Marginal Distribution of Temperature",
        x = "Temperature (K)",
-       y = "Frequency")
+       y = "Proportion")
     ```
     This histogram shows the distribution of daily temperatures in the dataset. The distribution looks to be 
     approximately normal with a mean of about 284 Kelvin. This tells us that the temperature for most of the days in the 
@@ -362,15 +362,21 @@ if(ncol(idx_table) >= 3) {
     
     * A joint distribution
     ```{r}
-    filtered_daily <- daily |> filter(!is.na(consumption_industry))
-    ggplot(filtered_daily, aes(x = temperature, y = consumption_industry)) +
-    geom_point(alpha = 0.5, color = "blue") +
-    labs(title = "Joint Distribution of Industry Consumer Consumption and Temperature",
-         x = "Temperature (K)",
-         y = "Consumption")
+    daily_seasons <- daily |> mutate(season = cut(month,
+                                     breaks = c(0, 2, 5, 8, 11, 12),
+                                     labels = c("Winter", "Spring", "Summer", "Fall", "Winter")
+                                     ))
+    filtered_daily <- daily_seasons |> filter(!is.na(consumption_industry))
+    ggplot(filtered_daily, aes(x = solar_radiation, y = consumption_industry, color = season)) +
+    geom_density_2d() +
+    labs(title = "Joint Distribution of Solar Radiation and Household Energy Consumption by Season",
+         x = "Solar Radiation",
+         y = "Household Energy Consumption (Small Consumers)",
+       color = "Season")
     ```
-    The graph shows a negative relationship between consumption and temperature. This means that as temperature
-    increases, industry consumption decreases.
+    The graph shows a negative relationship between consumption and solar radiation across seasons. This means that as 
+    solar radiation increases increases, industry consumption decreases and shows us how solar radiation is affected by 
+    season.
     
     * A plot of a summary measure such as a conditional mean
     ```{r}
@@ -398,18 +404,45 @@ if(ncol(idx_table) >= 3) {
     * A plot that shows seasonal effects before the crisis (September 2021 until October 2022)
     ```{r}
     new_daily <- daily |> filter(!is.na(consumption_power))
-    new_daily |> filter(date >= as.Date("2021-09-01") & date <= as.Date("2022-10-31")) |> 
+    new_daily |> filter(date >= as.Date("2017-01-01") & date <= as.Date("2021-8-31")) |> 
     ggplot(aes(x = date, y = consumption_power)) + geom_line(color = "blue") +
-    labs(title = "Seasonal Effects on Power Station Consumption (Sep 2021 - Oct 2022)",
+    labs(title = "Seasonal Effects on Power Station Consumption (Jan 2017 - August 2021)",
        x = "Date",
        y = "Consumption (Power)")
     ```
-This graph shows us that January 2022 has the lowest consumption for power stations and February had the highest. Overall the graph fluctuates a lot, but tend to have lower values in the summer and higher values in the winter
+This graph shows us that January has the lowest consumption for power stations and February has the highest across all the years. Overall the graph fluctuates a lot, but tend to have lower values in the summer and higher values in the winter
     
 
 ### Objective 2
 
 * Compare and contrast holidays and non-holidays for household energy consumption. Select 3 ways of comparing these groups. Provide at least one graph.
+```{r}
+mean_consumption <- daily |> group_by(holiday) |>
+summarize(mean_consumption_small = mean(consumption_small, na.rm = TRUE))
+print(mean_consumption)
+
+
+new_daily <- daily |> filter(!is.na(consumption_small))
+ggplot(new_daily, aes(x = factor(holiday), y = consumption_small)) + geom_boxplot() +
+labs(title = "Distribution of Household Energy Consumption for Holidays vs. Non-Holidays",
+      x = "Holiday (0 = Non-Holiday, 1 = Holiday)",
+      y = "Household Energy Consumption (Small Consumers)")
+
+
+daily_seasons2 <- daily |> mutate(season = cut(month,
+                                     breaks = c(0, 2, 5, 8, 11, 12),
+                                     labels = c("Winter", "Spring", "Summer", "Fall", "Winter")
+                                     ))
+filtered_daily <- daily_seasons2 |> filter(!is.na(consumption_industry))
+
+ggplot(filtered_daily, aes(x = wages, y = consumption_industry, color = season)) + geom_density_2d() +
+  labs(title = "Joint Distribution of Wages vs. Small Consumers Consumption by Season",
+       x = "Wages",
+       y = "Small Consumers ",
+       color = "Season")
+
+```
+
 
 ### Objective 3
 
