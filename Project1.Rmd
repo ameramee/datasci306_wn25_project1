@@ -125,7 +125,78 @@ print(lowest_median)
 
 * The original paper aggregated the data to monthly means for each consumption type in `daily` and the `Price` column of `gas` to produce the following image:<br/>
 ![Original consumption by month graph](proj1fig1.png)<br/>
-Produce plots that show the same information that is presented in this plot. Your plots do not have to have the same colors or markings, but we should be able to use them to compare the trends for the three price variables. 
+Produce plots that show the same information that is presented in this plot. Your plots do not have to have the same colors or markings, but we should be able to use them to compare the trends for the three price variables.
+
+```{r}
+library(tidyverse)
+library(lubridate)
+
+# Aggregate daily data (indices) to monthly means
+daily_monthly <- daily %>%
+  mutate(year_month = format(date, "%Y-%m")) %>%
+  group_by(year_month) %>%
+  summarize(
+    price_households_idx = mean(price_households_idx, na.rm = TRUE),
+    price_industry_idx = mean(price_industry_idx, na.rm = TRUE)
+  ) %>%
+  mutate(year_month = as.Date(paste0(year_month, "-01")))
+
+# Aggregate gas data (TTF price) to monthly means
+gas_monthly <- gas %>%
+  mutate(year_month = format(Date, "%Y-%m")) %>%
+  group_by(year_month) %>%
+  summarize(price_mean = mean(Price, na.rm = TRUE)) %>%
+  mutate(year_month = as.Date(paste0(year_month, "-01")))
+
+# Plot
+p <- ggplot() +
+  # Left y-axis: TTF Price
+  geom_line(
+    data = gas_monthly,
+    aes(x = year_month, y = price_mean, color = "Natural gas price TTF"),
+    size = 1
+  ) +
+  # Right y-axis: Household Price Index (solid)
+  geom_line(
+    data = daily_monthly,
+    aes(x = year_month, y = price_households_idx, color = "Natural gas price index for households DE"),
+    size = 1
+  ) +
+  # Right y-axis: Industry Price Index (dashed)
+  geom_line(
+    data = daily_monthly,
+    aes(x = year_month, y = price_industry_idx, color = "Natural gas price index for industry DE"),
+    linetype = "dashed",
+    size = 1
+  ) +
+  # Vertical lines at Jan 2020, Jan 2021, Jan 2022, Jan 2023
+  geom_vline(
+    xintercept = as.Date(c("2020-01-01", "2021-01-01", "2022-01-01", "2023-01-01")),
+    linetype = "solid",
+    color = "black",
+    size = 0.7
+  ) +
+  # X-axis from Apr 2019 to Feb 2023 (adjust as needed)
+  scale_x_date(
+    date_breaks = "3 months",
+    date_labels = "%b\n%Y",
+    limits = c(as.Date("2019-04-01"), as.Date("2023-02-28"))
+  ) +
+  # Separate y-axes
+  scale_y_continuous(
+    name = "Natural gas price TTF (€/MWh)",
+    sec.axis = sec_axis(~ ., name = "Natural gas price indices (2015 = 100)")
+  ) +
+  labs(
+    title = "Monthly Mean Natural Gas Prices and Price Indices in Germany",
+    x = "Date",
+    color = "Legend"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "top")
+
+print(p)
+```
 
 ### Task 5
 
