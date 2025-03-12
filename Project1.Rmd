@@ -387,7 +387,7 @@ if(ncol(idx_table) >= 3) {
     ```{r}
     new_daily <- daily |> filter(!is.na(consumption_small))
     new_daily |> ggplot(aes(x = heating_profiles, y = consumption_small)) + geom_point() +
-    facet_wrap(~ holiday, label = labeller(holiday = c("0" = "No Long Weekend", "1" = "Long Weekend"))) +
+    facet_wrap(~ long_weekend, label = labeller(long_weekend = c("0" = "No Long Weekend", "1" = "Long Weekend"))) +
     labs(title = "Small Station Consumption vs Heating Profiles by Long Weekend Status",
          x = "Heating Profile",
          y = "Consumption (Small)")
