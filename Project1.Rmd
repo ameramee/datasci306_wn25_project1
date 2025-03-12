@@ -128,9 +128,6 @@ print(lowest_median)
 Produce plots that show the same information that is presented in this plot. Your plots do not have to have the same colors or markings, but we should be able to use them to compare the trends for the three price variables.
 
 ```{r}
-library(tidyverse)
-library(lubridate)
-
 # Aggregate daily data (indices) to monthly means
 daily_monthly <- daily %>%
   mutate(year_month = format(date, "%Y-%m")) %>%
