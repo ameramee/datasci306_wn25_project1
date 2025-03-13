@@ -200,27 +200,20 @@ print(p)
 * Write a predicate function that returns true if any value in vector is missing. Use this function to find columns with missing values in the `daily` column. Create a plot or table that shows how often patterns of missingness occur: are all of the missing values in the same rows or are the various columns missing data in different ways?
 
 ```{r}
-  # Define a predicate function that returns TRUE if any value in a vector is missing
-has_missing <- function(x) {
+  has_missing <- function(x) {
   any(is.na(x))
 }
 
-# Use the function to check for missing values in each column of the 'daily' data frame
 missing_columns <- sapply(daily, has_missing)
-# Print out only those columns that have missing values
 print("Columns with missing values:")
 print(missing_columns[missing_columns == TRUE])
 
-# Create a table showing the pattern of missingness by row
-# For each row, create a string pattern where "1" indicates a missing value and "0" indicates a non-missing value
-daily_missing_pattern <- daily %>%
-  mutate(missing_pattern = apply(is.na(.), 1, function(row) paste(ifelse(row, "1", "0"), collapse = ""))) %>%
-  count(missing_pattern) %>%
-  arrange(desc(n))
+daily_missing_pattern <- daily |>
+  mutate(missing_pattern = apply(is.na(.), 1, function(row) paste(ifelse(row, "1", "0"), collapse = ""))) |>
+  count(missing_pattern) |> arrange(desc(n))
   
 print(daily_missing_pattern)
 
-# Plot the frequency of each missingness pattern
 ggplot(daily_missing_pattern, aes(x = missing_pattern, y = n)) +
   geom_bar(stat = "identity") +
   labs(title = "Missingness Patterns in Daily Data",
@@ -239,48 +232,32 @@ The missingness pattern plot shows that most rows have no missing values, but th
 * Limit the `gas` table to days where the price exceeded the yearly median. Use the concept of [circular means](https://en.wikipedia.org/wiki/Circular_mean) to compute the average day of the year when price exceeds the yearly median price. The `yday` function will likely be useful here. 
 
 ```{r circular-mean, echo=TRUE}
-library(tidyverse)
-library(lubridate)
 
-gas_circ <- gas %>%
-  # Extract the calendar year from Date
-  mutate(Year = year(Date)) %>%
-  group_by(Year) %>%
-  # Compute the median Price for each year
-  mutate(yearly_median = median(Price, na.rm = TRUE)) %>%
-  # Keep rows where Price exceeds the yearly median
-  filter(Price > yearly_median) %>%
-  # Convert to day of year; handle leap years
+gas_circ <- gas |>
+  mutate(Year = year(Date)) |> group_by(Year) |> mutate(yearly_median = median(Price, na.rm = TRUE)) |>
+  filter(Price > yearly_median) |>
   mutate(
     day_of_year = yday(Date),
-    # n_days is the number of days in the given year (365 or 366)
     n_days = if_else(leap_year(Date), 366, 365)
-  ) %>%
-  # Summarize by computing the circular mean of day_of_year
+  ) |>
   summarise(
     circ_mean_day = {
-      # Convert day_of_year to an angle in radians
       angles <- 2 * pi * (day_of_year / n_days)
       
-      # Compute mean of cos() and sin() to handle wrap-around
       avg_cos <- mean(cos(angles))
       avg_sin <- mean(sin(angles))
       
-      # atan2() gives the average angle
       mean_angle <- atan2(avg_sin, avg_cos)
       
-      # Ensure angle is in [0, 2*pi)
       if (mean_angle < 0) {
         mean_angle <- mean_angle + 2 * pi
       }
       
-      # Convert the angle back to a day of year
       mean_angle / (2 * pi) * n_days[1]
     }
-  ) %>%
-  ungroup()
+  ) |> ungroup()
 
-gas_circ
+print(gas_circ)
 
 ```
 
@@ -309,20 +286,15 @@ print(summary_data_sorted)
 * There are several variables that pull out data by different industry (the `_idx` columns). Create a table for these columns using `select` and the `ends_with` function. Provide two different plots that show of the relations between these variables (you do not need to have all variables in each plot).
 
 ```{r}
-  # Create a table with columns that end with '_idx'
-idx_table <- daily %>%
-  select(ends_with("_idx"))
+ idx_table <- daily |> select(ends_with("_idx"))
 
-# Print the first few rows of the table to verify the selection
 print(head(idx_table))
 
-# Create a scatter plot between the first two _idx columns (if available)
 if(ncol(idx_table) >= 2) {
   col1 <- names(idx_table)[1]
   col2 <- names(idx_table)[2]
   
-  plot1 <- ggplot(idx_table, aes_string(x = col1, y = col2)) +
-    geom_point() +
+  plot1 <- ggplot(idx_table, aes_string(x = col1, y = col2)) +geom_point() +
     labs(title = paste("Scatter Plot of", col1, "vs", col2),
          x = col1,
          y = col2) +
@@ -330,12 +302,10 @@ if(ncol(idx_table) >= 2) {
   print(plot1)
 }
 
-# Create a second scatter plot between the first and third _idx columns (if available)
 if(ncol(idx_table) >= 3) {
   col3 <- names(idx_table)[3]
   
-  plot2 <- ggplot(idx_table, aes_string(x = col1, y = col3)) +
-    geom_point() +
+  plot2 <- ggplot(idx_table, aes_string(x = col1, y = col3)) +geom_point() +
     labs(title = paste("Scatter Plot of", col1, "vs", col3),
          x = col1,
          y = col3) +
