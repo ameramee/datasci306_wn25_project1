@@ -531,6 +531,23 @@ The marginal distribution of solar radiation is right-skewed, with a high densit
 
 * Use `group_by` to summarize by a new feature of this data set not otherwise discussed in the tasks or objectives. What have you learned with these investigation?
 
+```{r}
+weekday_summary <- daily |> group_by(weekday) |>
+  summarise(
+    mean_consumption_industry = mean(consumption_industry, na.rm = TRUE),
+    mean_consumption_power = mean(consumption_power, na.rm = TRUE),
+    mean_consumption_household = mean(consumption_small, na.rm = TRUE)
+  )
+
+print(weekday_summary)
+```
+The mean industry consumption is the highest during the weekdays (with a peak of 1.25 on Wednesday) and the lowest on the 
+weekends (with a low of 1.08 on Saturday). The mean power station consumption has a similar pattern to mean industry consumption, 
+where consumption is the lowest on the weekends and the highest on the weekdays. Consumption being the highest on the weekdays and 
+lowest on the weekends make sense for these stations because the weekdays are when there are the most operations. The mean 
+consumption for household is relatively consistent across the week.
+
+
 ### Objective 6
 
 * Based on your exploration of the data, suggest three questions that could be asked from these data or additional data that you can imagine. Be sure to explain why the previous plots or calculations indicates that this would be an interesting our useful exploration.
