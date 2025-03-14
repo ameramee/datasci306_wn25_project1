@@ -85,7 +85,7 @@ print(summary_power)
 Answer some questions about the data in `daily`:
 
 * How many weeks do the data cover?
-The data covers 312.86 weeks (Ask about rounding!!)
+The data covers 312.86 weeks
 ```{r}
 weeks <- daily |> summarize(num_weeks = as.numeric(difftime(max(date), min(date), units = "weeks")))
 print(weeks)
@@ -571,20 +571,28 @@ informed by our findings of noticeable shifts in household consumption trends ar
 
 Lastly, could external economic factors, such as employment rates or energy policies, significantly influence industrial gas consumption patterns? 
 Earlier analysis indicated substantial changes in industrial consumption during the crisis, 
-suggesting the value of exploring external economic or policy-related variables to better understand these fluctuations and inform future decision-making.
+suggesting the value of exploring external economic or policy-related variables to better understand these fluctuations and inform future decision-
+making.
 
 
 ### Objective 7
 
 * Write an abstract for your project. Briefly explain what you did, what you found, and why a potential reader should be interested in your research.
 
-In this project, we analyzed daily natural gas consumption and pricing data to investigate how German consumers responded during the 2022 energy crisis. 
-We loaded and cleaned two datasets—one detailing consumption across small consumers, industry, and power stations, and another recording Dutch natural gas prices. 
-Our approach included summarizing key statistics, computing percentage changes over time, and aggregating the data to monthly means to replicate published plots. 
-We standardized consumption indices to a 2015 baseline and explored data quality by identifying missingness patterns and calculating circular means for price exceedance events. 
+In this project, we analyzed daily natural gas consumption and pricing data to investigate how German consumers responded during the 2022 energy 
+crisis. 
+We loaded and cleaned two datasets—one detailing consumption across small consumers, industry, and power stations, and another recording Dutch 
+natural gas prices. 
+Our approach included summarizing key statistics, computing percentage changes over time, and aggregating the data to monthly means to replicate 
+published plots. 
+We standardized consumption indices to a 2015 baseline and explored data quality by identifying missingness patterns and calculating circular means 
+for price exceedance events. 
 Additionally, we created novel visualizations using advanced ggplot functions to uncover deeper insights.
 
-Our findings reveal distinct consumption trends: industrial and power station usage notably dropped during the crisis, while household consumption, after a brief dip, rebounded strongly post-crisis. 
-Supplementary analyses showed clear seasonal patterns, differences between holiday and non-holiday usage, and a strong positive relationship between solar radiation and temperature. 
-These insights not only enhance our understanding of energy consumption dynamics during a crisis but also provide valuable information for policymakers and researchers focused on energy efficiency and crisis management.
+Our findings reveal distinct consumption trends: industrial and power station usage notably dropped during the crisis, while household consumption, 
+after a brief dip, rebounded strongly post-crisis. 
+Supplementary analyses showed clear seasonal patterns, differences between holiday and non-holiday usage, and a strong positive relationship between 
+solar radiation and temperature. 
+These insights not only enhance our understanding of energy consumption dynamics during a crisis but also provide valuable information for 
+policymakers and researchers focused on energy efficiency and crisis management.
 
