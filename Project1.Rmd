@@ -559,14 +559,32 @@ consumption for household is relatively consistent across the week.
 
 * Based on your exploration of the data, suggest three questions that could be asked from these data or additional data that you can imagine. Be sure to explain why the previous plots or calculations indicates that this would be an interesting our useful exploration.
 
-Based on the exploration of natural gas consumption data in Germany, three interesting questions for future analysis arise. First, how does solar radiation specifically impact power station gas consumption throughout different seasons or weather conditions? This question is supported by the previously observed strong positive correlation between solar radiation and temperature, and understanding this relationship could help optimize energy production and consumption strategies. Second, are there significant regional differences in household gas consumption patterns during the gas crisis period compared to before and after? Such exploration would provide deeper insights into how specific areas adapted differently during the crisis, informed by our findings of noticeable shifts in household consumption trends around the crisis timeframe. Lastly, could external economic factors, such as employment rates or energy policies, significantly influence industrial gas consumption patterns? Earlier analysis indicated substantial changes in industrial consumption during the crisis, suggesting the value of exploring external economic or policy-related variables to better understand these fluctuations and inform future decision-making.
+Based on the exploration of natural gas consumption data in Germany, three interesting questions for future analysis arise. 
+
+First, how does solar radiation specifically impact power station gas consumption throughout different seasons or weather conditions? 
+This question is supported by the previously observed strong positive correlation between solar radiation and temperature, 
+and understanding this relationship could help optimize energy production and consumption strategies. 
+
+Second, are there significant regional differences in household gas consumption patterns during the gas crisis period compared to before and after? 
+Such exploration would provide deeper insights into how specific areas adapted differently during the crisis, 
+informed by our findings of noticeable shifts in household consumption trends around the crisis timeframe. 
+
+Lastly, could external economic factors, such as employment rates or energy policies, significantly influence industrial gas consumption patterns? 
+Earlier analysis indicated substantial changes in industrial consumption during the crisis, 
+suggesting the value of exploring external economic or policy-related variables to better understand these fluctuations and inform future decision-making.
 
 
 ### Objective 7
 
 * Write an abstract for your project. Briefly explain what you did, what you found, and why a potential reader should be interested in your research.
 
-In this project, we analyzed daily natural gas consumption and pricing data to investigate how German consumers responded during the 2022 energy crisis. We loaded and cleaned two datasets—one detailing consumption across small consumers, industry, and power stations, and another recording Dutch natural gas prices. Our approach included summarizing key statistics, computing percentage changes over time, and aggregating the data to monthly means to replicate published plots. We standardized consumption indices to a 2015 baseline and explored data quality by identifying missingness patterns and calculating circular means for price exceedance events. Additionally, we created novel visualizations using advanced ggplot functions to uncover deeper insights.
+In this project, we analyzed daily natural gas consumption and pricing data to investigate how German consumers responded during the 2022 energy crisis. 
+We loaded and cleaned two datasets—one detailing consumption across small consumers, industry, and power stations, and another recording Dutch natural gas prices. 
+Our approach included summarizing key statistics, computing percentage changes over time, and aggregating the data to monthly means to replicate published plots. 
+We standardized consumption indices to a 2015 baseline and explored data quality by identifying missingness patterns and calculating circular means for price exceedance events. 
+Additionally, we created novel visualizations using advanced ggplot functions to uncover deeper insights.
 
-Our findings reveal distinct consumption trends: industrial and power station usage notably dropped during the crisis, while household consumption, after a brief dip, rebounded strongly post-crisis. Supplementary analyses showed clear seasonal patterns, differences between holiday and non-holiday usage, and a strong positive relationship between solar radiation and temperature. These insights not only enhance our understanding of energy consumption dynamics during a crisis but also provide valuable information for policymakers and researchers focused on energy efficiency and crisis management.
+Our findings reveal distinct consumption trends: industrial and power station usage notably dropped during the crisis, while household consumption, after a brief dip, rebounded strongly post-crisis. 
+Supplementary analyses showed clear seasonal patterns, differences between holiday and non-holiday usage, and a strong positive relationship between solar radiation and temperature. 
+These insights not only enhance our understanding of energy consumption dynamics during a crisis but also provide valuable information for policymakers and researchers focused on energy efficiency and crisis management.
 
