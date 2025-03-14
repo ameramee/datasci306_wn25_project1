@@ -209,8 +209,12 @@ print("Columns with missing values:")
 print(missing_columns[missing_columns == TRUE])
 
 daily_missing_pattern <- daily |>
-  mutate(missing_pattern = apply(is.na(.), 1, function(row) paste(ifelse(row, "1", "0"), collapse = ""))) |>
-  count(missing_pattern) |> arrange(desc(n))
+  mutate(missing_pattern = apply(is.na(daily), 1, function(row) {
+    paste(ifelse(row, "1", "0"), collapse = "")
+  })) |>
+  count(missing_pattern) |> 
+  arrange(desc(n))
+
   
 print(daily_missing_pattern)
 
