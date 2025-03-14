@@ -97,16 +97,18 @@ consumption_power % change: -49.44
 ```{r}
 percentage_change <- daily |> filter(!is.na(consumption_small))|> summarize(
     change_small = last(consumption_small) - first(consumption_small) / first(consumption_small) * 100,
-    change_industry = (last(consumption_industry) - first(consumption_industry)) / first(consumption_industry) * 100,
-    change_power = (last(consumption_power) - first(consumption_power)) / first(consumption_power) * 100
+    change_industry = (last(consumption_industry) - first(consumption_industry))
+                                             / first(consumption_industry) * 100,
+    change_power = (last(consumption_power) - first(consumption_power))
+                                                / first(consumption_power) * 100
   )
 print(percentage_change)
 ```
 * What proportion of the days are marked as holidays?
 0.0361
 ```{r}
-proportion <- daily |> summarize(holiday_days = sum(holiday, na.rm = TRUE), total_days = n(), proportion =
-                                                    holiday_days / total_days)
+proportion <- daily |> summarize(holiday_days = sum(holiday, na.rm = TRUE), total_days = n(), 
+                                                   proportion = holiday_days / total_days)
 print(proportion)
 ```
 * For each month in each year, what was the year-month combination with the lowest median `consumption_power` value?
@@ -270,7 +272,8 @@ print(gas_circ)
 * Using the cut function, create two nominal variables from quantitative data in the `daily` dataset. Use these groups to summarize the data. Use arrange to show the smallest or largest values in these comparisons.
 
 ```{r}
-daily_grouped <- daily |> mutate(temperature_group = cut(temperature, breaks = 3, labels = c("Low", "Medium", "High")),
+daily_grouped <- daily |> mutate(temperature_group = cut(temperature, breaks = 3, 
+                                    labels = c("Low", "Medium", "High")),
     heating_profiles = cut(heating_profiles, breaks = 2, labels = c("Low", "High"))
   )
 
