@@ -484,6 +484,11 @@ ggplot(daily_clean, aes(x = temperature, y = consumption_small)) +
   ) +
   theme_minimal()
 ```
+First Plot (stat_ellipse)
+This scatter plot shows household consumption versus temperature, with a 95% confidence ellipse wrapped around the points. The ellipse, drawn by stat_ellipse(), basically highlights where most of the data falls, so you can see the general shape and spread of the relationship. It’s a quick way to visualize how closely the two variables cluster together and if there’s any obvious tilt or pattern in the data.
+
+Second Plot (geom_quantile)
+Here, I used geom_quantile() to add three regression lines for the 25th, 50th, and 75th percentiles. Instead of just showing how the average consumption changes with temperature, these lines reveal how consumption behaves across different parts of the distribution. It’s super handy for spotting whether certain ranges of temperature or consumption behave differently than the rest.
 
 ### Objective 4
 
