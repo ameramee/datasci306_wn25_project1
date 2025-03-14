@@ -453,7 +453,39 @@ stable.
 ### Objective 4
 
 * Investigate solar radiation's marginal distribution and also it's relationship with temperature.
+```{r}
+# Marginal Distribution of Solar Radiation
+ggplot(daily, aes(x = solar_radiation)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "steelblue", color = "black") +
+  geom_density(color = "red", size = 1) +
+  labs(
+    title = "Marginal Distribution of Solar Radiation",
+    x = "Solar Radiation",
+    y = "Density"
+  ) +
+  theme_minimal()
 
+# Relationship between Solar Radiation and Temperature
+ggplot(daily, aes(x = temperature, y = solar_radiation)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+  labs(
+    title = "Relationship between Solar Radiation and Temperature",
+    x = "Temperature (K)",
+    y = "Solar Radiation"
+  ) +
+  theme_minimal()
+
+# Compute the correlation between solar radiation and temperature
+correlation <- cor(daily$solar_radiation, daily$temperature, use = "complete.obs")
+cat("Correlation between solar radiation and temperature:", correlation, "\n")
+
+# Optional: Fit a linear model to further inspect the relationship
+model <- lm(solar_radiation ~ temperature, data = daily)
+print(summary(model))
+
+```
+The marginal distribution of solar radiation is right-skewed, with a high density of lower radiation values and a gradual decline in frequency as radiation levels increase, showing a bimodal pattern with peaks at lower and mid-range values. Solar radiation exhibits a strong positive linear relationship with temperature. 
 
 ### Objective 5
 
