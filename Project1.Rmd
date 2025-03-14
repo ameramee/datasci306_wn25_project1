@@ -418,6 +418,29 @@ ggplot(filtered_daily, aes(x = wages, y = consumption_industry, color = season))
 
 * According to the paper, the gas crisis occurred between September 2021 until October 2022. Compare this period with the periods before and after on household and industrial consumption. Write a paragraph explaining your findings.
 
+```{r}
+daily_period <- daily |>
+  mutate(period = case_when(
+    date < as.Date("2021-09-01") ~ "Before",
+    date >= as.Date("2021-09-01") & date <= as.Date("2022-10-31") ~ "During",
+    date > as.Date("2022-10-31") ~ "After"
+  ))
+
+stats <- daily_period |> group_by(period) |>
+  summarize(
+    mean_household = mean(consumption_small, na.rm = TRUE),
+    std_household = sd(consumption_small, na.rm = TRUE),
+    mean_industrial = mean(consumption_industry, na.rm = TRUE),
+    std_industrial = sd(consumption_industry, na.rm = TRUE)
+  )
+print(stats)
+
+```
+Mean household consumption started at 1.07, then dipped to 0.977 during the crisis and then rose up to 1.53 after the 
+crisis. The standard deviation of the mean also decreased after the crisis indicating more stability. The crisis led to 
+more overall household consumption. The mean industrial consumption started at 1.22 before the crisis and decreases 
+during the crisis and then again after the crisis. The crisis significantly impacted industrial consumption and it has yet to recover to pre-crisis levels. The standard deviation after the crisis is the lowest suggesting that it's more 
+stable.
 
 ### Objective 4
 
