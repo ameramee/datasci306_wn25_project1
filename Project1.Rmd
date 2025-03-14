@@ -336,16 +336,16 @@ if(ncol(idx_table) >= 3) {
     
     * A joint distribution
     ```{r}
-    daily_seasons <- daily |> mutate(season = cut(month,
+    daily_seasons <- daily |> mutate(season = cut(month(date),
                                      breaks = c(0, 2, 5, 8, 11, 12),
                                      labels = c("Winter", "Spring", "Summer", "Fall", "Winter")
                                      ))
     filtered_daily <- daily_seasons |> filter(!is.na(consumption_industry))
     ggplot(filtered_daily, aes(x = solar_radiation, y = consumption_industry, color = season)) +
     geom_density_2d() +
-    labs(title = "Joint Distribution of Solar Radiation and Household Energy Consumption by Season",
+    labs(title = "Joint Distribution of Solar Radiation and Industry Consumption by Season",
          x = "Solar Radiation",
-         y = "Household Energy Consumption (Small Consumers)",
+         y = "Industry Energy Consumption",
        color = "Season")
     ```
     The graph shows a negative relationship between consumption and solar radiation across seasons. This means that as 
