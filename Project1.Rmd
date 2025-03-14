@@ -107,7 +107,7 @@ print(percentage_change)
 ```{r}
 proportion <- daily |> summarize(holiday_days = sum(holiday, na.rm = TRUE), total_days = n(), proportion =
                                                     holiday_days / total_days)
-print(holidays)
+print(proportion)
 ```
 * For each month in each year, what was the year-month combination with the lowest median `consumption_power` value?
 August 2021 has the lowest median_power with 0.1635
