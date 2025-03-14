@@ -450,6 +450,41 @@ stable.
 
 * Explore the [documentation for ggplot](https://ggplot2.tidyverse.org/). Select one geometery and one `stat_` function we have not used before or use an option to a previously used geometry/stat with a new option. Write a short paragraph explaining what the plots show. 
 
+```{r}
+library(quantreg)
+
+# Create a "clean" version of daily that excludes NA or infinite values
+daily_clean <- daily %>%
+  filter(
+    !is.na(temperature), 
+    !is.na(consumption_small),
+    is.finite(temperature),
+    is.finite(consumption_small)
+  )
+
+#stat_ellipse - scatter plot with 95% confidence ellipse
+ggplot(daily_clean, aes(x = temperature, y = consumption_small)) +
+  geom_point(alpha = 0.5, color = "darkgreen") +
+  stat_ellipse(level = 0.95, color = "blue", linetype = "dashed", size = 1) +
+  labs(
+    title = "Household Consumption vs. Temperature with 95% Ellipse",
+    x = "Temperature (K)",
+    y = "Household Consumption (Small Consumers)"
+  ) +
+  theme_minimal()
+
+#geom_quantile - scatter plot with quantile regression lines
+ggplot(daily_clean, aes(x = temperature, y = consumption_small)) +
+  geom_point(alpha = 0.5, color = "darkgreen") +
+  geom_quantile(quantiles = c(0.25, 0.5, 0.75), color = "red", size = 1) +
+  labs(
+    title = "Quantile Regression for Household Consumption vs. Temperature",
+    x = "Temperature (K)",
+    y = "Household Consumption (Small Consumers)"
+  ) +
+  theme_minimal()
+```
+
 ### Objective 4
 
 * Investigate solar radiation's marginal distribution and also it's relationship with temperature.
